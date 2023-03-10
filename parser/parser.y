@@ -148,6 +148,10 @@ Stmt: T_RETURN T_NUMERIC_CONSTANT T_SEMI {
     auto ptr = new Tree("ReturnStmt");
     ptr->addSon($2);
     $$ = ptr;
-}
+  }
+  | T_SEMI {
+    $$ = new Tree("NullStmt");
+  }
+  ;
 // TO-DO：你需要在这里实现文法和树，通过测例
 %%
