@@ -118,7 +118,11 @@ Begin: CompUnit {
   }
   ;
 
-CompUnit: GlobalDecl {
+CompUnit: CompUnit GlobalDecl {
+    $1->addSon($2);
+    $$ = $1;
+  }
+  | GlobalDecl {
     auto ptr = new Tree("TranslationUnitDecl");
     ptr->addSon($1);
     $$ = ptr;
@@ -128,7 +132,16 @@ CompUnit: GlobalDecl {
 GlobalDecl: FuncDef {
     $$ = $1;
   }
+  | VarDecl {
+    $$= $1;
+  }
 	;
+
+VarDecl: T_INT T_IDENTIFIER T_SEMI {
+  auto ptr = new Tree("VarDecl", $2->name);
+  delete $2;
+  $$ = ptr;
+}
 
 FuncDef:T_INT T_IDENTIFIER T_L_PAREN T_R_PAREN Block {
     auto ptr = new Tree("FunctionDecl", $2->name);
